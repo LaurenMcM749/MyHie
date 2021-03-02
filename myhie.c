@@ -15,6 +15,7 @@
 
 
 //Make multiple children using fork: https://www.geeksforgeeks.org/create-n-child-process-parent-process-using-fork-c/
+//Writing to child using pipe https://stackoverflow.com/questions/60104813/using-two-pipes-to-communicate-between-parent-process-and-child-process
 
 // Data record: resident-id, first name, last name, number of dependents, income and postal code
 
@@ -66,102 +67,135 @@ int main(int argc, char*argv[]){
     atnum = argv[3];
     ord = argv[4];
 
-    while(1){
+   
         
         pid_t coordpid;
         pid_t sorterpid;
         pid_t mergerpid;
         int fd[2];
-        char ans3[20] = "print exec";
+        char printtest[20] = "print exec";
         int ans1 = 49;
+        int parent_fds[2];
 
-        
+        //This prints 3 times
+        // printf("%s\n",ans3);
+
         // Create pipe in ROOT (parent)
         if (pipe(fd) == -1) {
             fprintf(stderr, "Pipe failed.\n");
             return 1;
         }
 
-      
+        if (pipe(parent_fds) != 0)  /* || not && */
+        {
+            fprintf(stderr, "pipes failed!\n");
+            return EXIT_FAILURE;
+        }
 
         //Create coord node
         coordpid = fork();
 
-      
         if (coordpid == -1) {
             perror ( " Failed to fork " );
             exit (1) ;
             }
         //Parent (ROOT) writes to pipe
 
-      
-
-        // Close reading end 
-        close(fd[READ_END]); 
-
-     
-
-        // Wait for child process to complete
-        wait(NULL); 
-
-        // Write sum (ans) to pipe
-        write(fd[WRITE_END], &ans1, sizeof(int)); 
-
-        // Close write end of pipe
-        close(fd[WRITE_END]);
+        // printf("%s\n",ans3);
 
         //In coord (if coordpid == 0, in child of root = coord)
         if (coordpid == 0) {
+
+             printf("%d: I reached the child :)\n", (int)getpid());
+            // close unwanted pipe ends by child
+          
+            close(parent_fds[1]);
+
+             // read from parent pipe
+            char fromParent[100];
+            int n = read(parent_fds[0], fromParent, sizeof(fromParent) - 1);
+            fromParent[n] = '\0';
+            printf("%d: Child: read from parent pipe- %s\n", (int)getpid(), fromParent);
+            close(parent_fds[0]);
+           
+            // // Close Write end
+            // close(fd[WRITE_END]);
+
+            // int ans2; 
+
+            // // Read ans from root node 
+            // read(fd[READ_END], &ans2, sizeof(int));
+
+            // // Won't print this
+            // // printf("%s\n",printtest);
+
+            // // Close reading end
+            // close(fd[READ_END]);
+
+            // printf("The pipe answer is %d\n", ans2);
+
+            // printf("Print statement after pipes %d",ans2);
+
+            // //Make merger node
+            // mergerpid = fork();
+            // //If in merger node
+            // if(mergerpid == 0){
+            //     printf("Merger node pid: %d, Parent pid: %d", getpid(), getppid());
+            //     exit(0);
+            // }
+            // if(mergerpid == 1){
+            //     printf("Still in coord node - hasn't made merger");
+            // }
+
             
-            //Make merger node
-            mergerpid = fork();
-            //If in merger node
-            if(mergerpid == 0){
-                printf("Merger node pid: %d, Parent pid: %d", getpid(), getppid());
-                exit(0);
-            }
-            if(mergerpid == 1){
-                printf("Still in coord node - hasn't made merger");
-            }
+            // // Coord makes k sorter nodes
+            // for(int i=0;i<k;i++){ 
+            //     sorterpid = fork();
+            //     //In sorter node
+            //     if(sorterpid == 0) 
+            //     { 
+            //         printf("\n[sorter] pid %d from [parent] pid %d\n",getpid(),getppid());
+            //         exit(0); 
+            //     }
+            //     //If failed to create sorter node
+            //     if (sorterpid == -1)
+            //     {
+            //         perror("Failed to fork");
+            //         exit(1);
+            //     }
+            // }  
+            // //Still in coord node (coordpid = 0)
+            // // Sorterpid > 0 - coordnode waits for each sorter to finish
+            // for(int i=0;i<k;i++){
+            //     wait(NULL);   
+            // }
+        }
+        // Coordpid == 1 (In Root)
+        else if (coordpid > 0) {
 
-            // Close Write end
-            close(fd[WRITE_END]);
+            // close unwanted pipe ends by parent
+            close(parent_fds[0]);
 
-            int ans2;
+            // write from terminal to parent pipe FOR child to read
+            printf("%d: Parent: writing to pipe '%s'\n", (int)getpid(), argv[1]);
+            write(parent_fds[1],  argv[1], strlen(argv[1]));
+            close(parent_fds[1]);
 
-            // Read ans from root node 
-            read(fd[READ_END], &ans2, sizeof(int)); 
+            // // Close reading end 
+            // close(fd[READ_END]); 
 
-            // Close reading end
-            close(fd[READ_END]);
+            // // Wait for child process to complete
+            // wait(NULL); 
 
-            printf("Print statement after pipes %s",ans2);
+            // int ans2;
+            // ans2 = 70;
 
-            // Make k sorter nodes
-            for(int i=0;i<k;i++){ 
-                //In sorter node
-               
-                sorterpid = fork();
-                if(sorterpid == 0) 
-                { 
-                    printf("\n[sorter] pid %d from [parent] pid %d\n",getpid(),getppid());
-                    exit(0); 
-                }
-                //If failed to create sorter node
-                if (sorterpid == -1) {
-                    perror("Failed to fork");
-                    exit(1);
-                }
-            } 
-            //TODO - What exactly does wait do here?
-            //Waits for state changes in a child of the calling process, and obtains information about the child whose state has changed.
-            //Parent waits for as many children as it makes
-            //If sorterpid == 1, in parent of sorter - in coord
-                for(int i=0;i<k;i++){
-                    wait(NULL);   
-                }
-              
-               
+            // write(fd[WRITE_END], &ans2, sizeof(int)); //read left half sum from pipe
+        
+            // close(fd[WRITE_END]);// Close the reading end of the pipe
+
+            // printf("The pipe answer is %d\n", ans1);
+        
 
         }
       
@@ -169,8 +203,6 @@ int main(int argc, char*argv[]){
 
         
     return 0;
-
-    }
        
         
     
