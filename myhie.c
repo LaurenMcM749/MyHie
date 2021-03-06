@@ -1,21 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <limits.h>
-#include <errno.h> 
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h> 
-#include <sys/stat.h> 
 
-#define N 101
-#define READ_END 0
-#define WRITE_END 1
-#define LENGTH 200
-
+#include<stdio.h>
+#include<stdlib.h>
+#include "myhie.h"
 
 //Make multiple children using fork: https://www.geeksforgeeks.org/create-n-child-process-parent-process-using-fork-c/
 //Writing to child using pipe https://stackoverflow.com/questions/60104813/using-two-pipes-to-communicate-between-parent-process-and-child-process
