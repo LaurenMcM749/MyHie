@@ -162,9 +162,6 @@ int main(int argc, char *argv[]){
     }
     fclose(testdata);
 
-    //List created
-    printList(start);
-
     //If strcmp = 0
     
     if( strcmp(argv[1],"0" )==0){

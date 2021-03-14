@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
         {
             printf("Ascending \n");
             bubbleSort(start);
-            printList(start);
+            
            
         }
 
@@ -180,6 +180,8 @@ int main(int argc, char *argv[]){
 
 
     }
+
+    printList(start);
     
 
 }

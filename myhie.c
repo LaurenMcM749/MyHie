@@ -97,6 +97,7 @@ while(1){
     int fdnamed;
     char arr1[LENGTH];
     int rootpid;
+    int p;
 
     //***Handle command line arguments***
     char argarr[1000];
@@ -307,10 +308,21 @@ while(1){
             // EXECS
             if(sorterpid == 0) { 
                 
-                printf("%d: I am sorter node \n", getpid());
-                execlp("./sorter1","sorter1", "0", "a", NULL); 
+                p = getpid();
+                printf("%d: I am sorter node \n", p);
                 
-
+                //Even Pid use Bubble Sort
+                if( p % 2 == 0){
+                    printf("Using bubble sort...\n");
+                    execlp("./sorter1","sorter1", argv[3], argv[4], NULL); 
+                }
+                //Odd pid use Insertion Sort
+                else {
+                    printf("Using insertion sort...\n");
+                    execlp("./sorter2","sorter2", argv[3], argv[4], NULL); 
+                }
+                
+                
                 //Exec here
                 //If getpid % 2 == 0 -
                 // char *args[]={"sorting1.c",NULL}; 
