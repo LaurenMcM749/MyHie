@@ -174,9 +174,6 @@ while(1){
             return EXIT_FAILURE;
         }
 
-        printf("I am the root process");
-        fflush(stdout);
-
         // close unwanted pipe ends by parent
         close(parent_fds[0]);
 
@@ -194,48 +191,48 @@ while(1){
     //In Coord Node
     if (coordpid == 0) {
         //Make merger node
-        mergerpid = fork();
-        // wait(NULL);
+        // mergerpid = fork();
+        // // wait(NULL);
        
-        if (mergerpid == -1){
-            printf("Merger node failed \n");
-        } 
-        //In merger node
-        if (mergerpid == 0){
-            wait(NULL); //Wait makes the program not stop
-            printf("I am merger node \n");
+        // if (mergerpid == -1){
+        //     printf("Merger node failed \n");
+        // } 
+        // //In merger node
+        // if (mergerpid == 0){
+        //     wait(NULL); //Wait makes the program not stop
+        //     printf("I am merger node \n");
 
-            // Open FIFO for Read only 
-            //Changed O_RDONLY to O_RDWR - bug was that wasn't opened at write end at same time
-            fdnamed = open(myfifo5, O_RDWR); 
+        //     // Open FIFO for Read only 
+        //     //Changed O_RDONLY to O_RDWR - bug was that wasn't opened at write end at same time
+        //     fdnamed = open(myfifo5, O_RDWR); 
 
-            if ( fdnamed < 0) 
-            {
-                perror("File can't open to read.");
-                return 0;
-            }
+        //     if ( fdnamed < 0) 
+        //     {
+        //         perror("File can't open to read.");
+        //         return 0;
+        //     }
           
-             printf("Opened fd: %d\n", fdnamed);
+        //      printf("Opened fd: %d\n", fdnamed);
     
-            // THIS IS THE BUG !! Read from FIFO - STUCK HERE NOW
-            read(fdnamed, arr1, sizeof(arr1)); 
+        //     // THIS IS THE BUG !! Read from FIFO - STUCK HERE NOW
+        //     read(fdnamed, arr1, sizeof(arr1)); 
     
-            // Print the read message 
-            printf("Merger node reading: %s\n", arr1); 
-            close(fdnamed);
-            printf("Merger node pid: %d, Parent pid: %d \n", getpid(), getppid());
+        //     // Print the read message 
+        //     printf("Merger node reading: %s\n", arr1); 
+        //     close(fdnamed);
+        //     printf("Merger node pid: %d, Parent pid: %d \n", getpid(), getppid());
 
-            printf("Merger sending SIGUSR2 to coord...\n");
-            printf("Mergerpid = 0: Pid is: %d\n", getpid());
-            kill(getppid(),SIGUSR2); /*send SIGUSR1 signal to parent*/
-            //Doesn't print this...
+        //     printf("Merger sending SIGUSR2 to coord...\n");
+        //     printf("Mergerpid = 0: Pid is: %d\n", getpid());
+        //     kill(getppid(),SIGUSR2); /*send SIGUSR1 signal to parent*/
+        //     //Doesn't print this...
             
-            exit(0);
-            //How to get child to terminate
-        }
+        //     exit(0);
+        //     //How to get child to terminate
+        // }
         //In coord node
-        if (mergerpid > 0)
-        {
+        // if (mergerpid > 0)
+        // {
             // printf("Mergerpid > 0: Pid is: %d\n", getpid());
             printf("I am coord node %d \n", getpid());
                 
@@ -304,19 +301,21 @@ while(1){
                     
                 
                 // }
-                }
+                
 
             //In sorter node
             // EXECS
             if(sorterpid == 0) { 
                 
-                printf("Mergerpid > 0 and sorterpid == 0 - SORTER NODE: Pid is: %d\n", getpid());
-                printf("I am sorter node %d \n", getpid());
+                printf("%d: I am sorter node \n", getpid());
+                execlp("./sorter1","sorter1", "0", "a", NULL); 
+                
 
                 //Exec here
-                //If odd-
+                //If getpid % 2 == 0 -
                 // char *args[]={"sorting1.c",NULL}; 
                 // execve(args[0],NULL); 
+                //Pass to merger
 
                  //If even-
                 // char *args[]={"sorting2.c",NULL}; 
@@ -352,6 +351,7 @@ while(1){
             }
          
         }  
+    }
         //Still in coord node (coordpid = 0)
         // Sorterpid > 0 - coordnode waits for each sorter to finish
         // for(int i=0;i<k;i++){
@@ -364,7 +364,7 @@ while(1){
     
     return 0;
 
-}
+// }
 }  
 }  
 
