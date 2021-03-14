@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <fcntl.h> 
 #include <sys/stat.h> 
+#include <signal.h>
 
 #define N 101
 #define READ_END 0
