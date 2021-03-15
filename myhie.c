@@ -166,16 +166,16 @@ while(1){
     //Make sorter results pipe
 
     char * sr = "sorter_results"; 
-    int mkfifo2;
+    int mkfifo3;
   
-    mkfifo2 = mkfifo(sr, 0777); 
+    mkfifo3 = mkfifo(sr, 0777); 
 
-    if (mkfifo2 == 0)
+    if (mkfifo3 == 0)
     {
         printf("Myfifo success\n");
     }
 
-    if (mkfifo2 == -1)
+    if (mkfifo3 == -1)
     {
         if (errno != EEXIST)
         {
@@ -245,33 +245,31 @@ while(1){
         
             printf("I am merger node \n");
 
-            // Open FIFO for Read only 
-            //Changed O_RDONLY to O_RDWR - bug was that wasn't opened at write end at same time
-            fdnamed = open(sr, O_NONBLOCK); 
-
-            if ( fdnamed < 0) 
-            {
-                perror("File can't open to read.");
-                return 0;
-            }
-          
-            printf("Opened fd: %d\n", fdnamed);
-            if ( read(fdnamed, singleLine, sizeof(singleLine)) < 0) 
-            {
-                perror("read");
-            }; 
-            printf("Merger node reading: %s\n", singleLine); 
-            close(fdnamed);
+            //Pipes unsuccessful
+            // fdnamed = open(sr, O_NONBLOCK); 
+            // if ( fdnamed < 0) 
+            // {
+            //     perror("File can't open to read.");
+            //     return 0;
+            // }
+            // printf("Opened fd: %d\n", fdnamed);
+            // if ( read(fdnamed, singleLine, sizeof(singleLine)) < 0) 
+            // {
+            //     perror("read");
+            // }; 
+            // printf("Merger node reading: %s\n", singleLine); 
+            // close(fdnamed);
         
-            //Send SIGUSR2 when complete
-            printf("Merger sending SIGUSR2 to coord...\n");
-            kill(getppid(),SIGUSR2); 
+            // //Send SIGUSR2 when complete
+            // printf("Merger sending SIGUSR2 to coord...\n");
+            // kill(getppid(),SIGUSR2); 
         
         }
         //In coord node
-        // if (mergerpid > 0)
-        // {
+        if (mergerpid > 0)
+        {
             printf("I am coord node %d \n", getpid());
+            wait(NULL);
 
             pipe(pipe1);
                 
@@ -333,13 +331,9 @@ while(1){
                     perror("Failed to fork");
                     exit(1);
                 }
-        
-                // In Coord node
-                // if (sorterpid > 0)
                     
                 //In sorter node
-                //TODO - Get the args to come from parent pipe!!
-                if(sorterpid == 0) { 
+                if (sorterpid == 0) { 
                     
                     p = getpid();
                     printf("%d: I am sorter node \n", p);
@@ -369,20 +363,20 @@ while(1){
                     //Even pid use Bubble Sort
                     if ( p % 2 == 0)
                     {
-                        printf("Using bubble sort...\n");
                         execlp("./sorter1","sorter1", argv[3], argv[4], NULL); 
-        
+                        exit(0);
+
                     }
                     //Odd pid use Insertion Sort
                     else 
                     {
-                        printf("Using insertion sort...\n");
                         execlp("./sorter2","sorter2", argv[3], argv[4], NULL); 
-                    
+                        exit(0);
                     }
 
-                    // Write file to merger
     
+                    
+
                     // // close unwanted pipe ends by child
                     // fflush(stdout);
                     // close(parent_fds1[1]);
@@ -394,35 +388,15 @@ while(1){
                     // printf("%d: Sorter: read from coord pipe- %s \n", (int)getpid(), fromCoord);
                     // close(parent_fds[0]);
 
-                    // // Open FIFO for write only 
-                    // fdnamed = open(myfifo5, O_WRONLY); 
-            
-                    // // Take an input from user. 
-                    // // LENGTH 200 is maximum length 
-                    // // fgets(arr2, LENGTH, stdin); 
-            
-                    // // Write the input arr2 on FIFO 
-                    // // and close it 
-                    // write(fdnamed, "fifotest", strlen("fifotest")+1);  //+1 to account for \0 at the end of strings in C
-                    // close(fdnamed); 
         
                     exit(0); 
                 }
             
             }  
-        // }
-        //Still in coord node (coordpid = 0)
-        // Sorterpid > 0 - coordnode waits for each sorter to finish
-        // for(int i=0;i<k;i++){
-        //     //Wait for sorter to finish
-        //     wait(NULL);   
-        // }
-
-        // Coordpid == 1 (In Root)
-    
+        }
     
     return 0;
 
-// }
+}
 }  
 }  

@@ -55,7 +55,7 @@ void swap(bucket_t *a, bucket_t *b)
 } 
 
 
-void bubbleSort(bucket_t *start) 
+void bubbleSorta(bucket_t *start) 
 { 
     int swapped, i; 
     bucket_t *ptr1; 
@@ -84,6 +84,37 @@ void bubbleSort(bucket_t *start)
     } 
     while (swapped); 
 } 
+
+void bubbleSortd(bucket_t *start) 
+{ 
+    int swapped, i; 
+    bucket_t *ptr1; 
+    bucket_t *lptr = NULL; 
+  
+    /* Checking for empty list */
+    if (start == NULL) 
+        return; 
+  
+    do
+    { 
+        swapped = 0; 
+        ptr1 = start; 
+  
+        while (ptr1->next != lptr) 
+        { 
+            //While current RIN > next RIN
+            if ( atoi(ptr1->rin) < atoi(ptr1->next->rin) ) 
+            {  //
+                swap(ptr1, ptr1->next); 
+                swapped = 1; 
+            } 
+            ptr1 = ptr1->next; 
+        } 
+        lptr = ptr1; 
+    } 
+    while (swapped); 
+} 
+
 
 
 void printList(bucket_t *start, FILE *outfile) 
@@ -116,6 +147,30 @@ int main(int argc, char *argv[]){
     char *inc;
     char *zip;
     int count;
+    int fdnamed;
+    char* sorter_results;
+    int w;
+
+      //Make sorter results pipe
+
+    char * sr = "sorter_results_file"; 
+    int mkfifo3;
+  
+    mkfifo3 = mkfifo(sr, 0777); 
+
+    if (mkfifo3 == 0)
+    {
+        printf("Myfifo success\n");
+    }
+
+    if (mkfifo3 == -1)
+    {
+        if (errno != EEXIST)
+        {
+        perror("Error: couldn't create myfifo pipe");
+        exit(0);
+        }
+    }
 
     bucket_t *start = NULL; 
 
@@ -169,18 +224,35 @@ int main(int argc, char *argv[]){
         if( strcmp(argv[2],"a" ) == 0)
         {
             printf("Ascending \n");
-            bubbleSort(start);
+            bubbleSorta(start);
+            exit(0);
         }
 
         if( strcmp(argv[2],"d" ) == 0)
         {
             printf("Descending \n");
+            bubbleSortd(start);
+            exit(0);
         }
 
 
     }
 
     printList(start, outfile);
+    // fgets(outfile,sorter_results,150);
+
+    // while(!feof(outfile)){
+    //     fdnamed = open(sr, O_NONBLOCK); 
+    //     // Write the input arr2 on FIFO  and close it 
+    //     w = write(fdnamed, "hello", strlen("hello"));
+    //     if ( w < 0 ){
+    //         perror("write");
+    //     };  //+1 to account for \0 at the end of strings in C
+    //     printf("Wrote %d bytes to %s to sorter_results pipe\n", w, sorter_results);
+    //     close(fdnamed); 
+       
+    // }
+
     fclose(outfile);
 
 
