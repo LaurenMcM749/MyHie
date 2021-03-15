@@ -67,7 +67,7 @@ void signalHandler(int signum){
 
 int main(int argc, char*argv[]){
 
-while(1){
+
 
     FILE *fpointer;
     FILE *outfile;
@@ -234,16 +234,16 @@ while(1){
     //In Coord Node
     if (coordpid == 0) {
 
-        mergerpid = fork();
+        // mergerpid = fork();
        
-        if (mergerpid == -1){
-            printf("Merger node failed \n");
-        } 
+        // if (mergerpid == -1){
+        //     printf("Merger node failed \n");
+        // } 
         
-        //In merger node
-        if (mergerpid == 0){
+        // //In merger node
+        // if (mergerpid == 0){
         
-            printf("I am merger node \n");
+        //     printf("I am merger node \n");
 
             //Pipes unsuccessful
             // fdnamed = open(sr, O_NONBLOCK); 
@@ -264,10 +264,10 @@ while(1){
             // printf("Merger sending SIGUSR2 to coord...\n");
             // kill(getppid(),SIGUSR2); 
         
-        }
+        // }
         //In coord node
-        if (mergerpid > 0)
-        {
+        // if (mergerpid > 0)
+        // {
             printf("I am coord node %d \n", getpid());
             wait(NULL);
 
@@ -390,7 +390,7 @@ while(1){
 
         
                     exit(0); 
-                }
+                // }
             
             }  
         }
@@ -399,4 +399,4 @@ while(1){
 
 }
 }  
-}  
+
