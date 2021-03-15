@@ -269,8 +269,8 @@ int main(int argc, char *argv[]){
 
     FILE *testdata;
     FILE *outfile;
-    testdata = fopen("test_data.txt","r");
-    outfile = fopen("outfile.txt","a");
+    testdata = fopen(argv[4],"r");
+    outfile = fopen(argv[5],"a");
     char singleLine[500];
     char *token;
     int i;
@@ -407,21 +407,25 @@ int main(int argc, char *argv[]){
     }
 
     printList(start, outfile);
-    // fgets(outfile,sorter_results,150);
+   
 
-    // while(!feof(outfile)){
-    //     fdnamed = open(sr, O_NONBLOCK); 
-    //     // Write the input arr2 on FIFO  and close it 
-    //     w = write(fdnamed, "hello", strlen("hello"));
-    //     if ( w < 0 ){
-    //         perror("write");
-    //     };  //+1 to account for \0 at the end of strings in C
-    //     printf("Wrote %d bytes to %s to sorter_results pipe\n", w, sorter_results);
-    //     close(fdnamed); 
-       
-    // }
+    
 
     fclose(outfile);
+    
+
+    while(!feof(outfile)){
+        fgets(sorter_results,150,outfile);
+        fdnamed = open(sr, O_NONBLOCK); 
+        // Write the input arr2 on FIFO  and close it 
+        w = write(fdnamed, sorter_results, strlen(sorter_results));
+        if ( w < 0 ){
+            perror("write");
+        };  //+1 to account for \0 at the end of strings in C
+        printf("Wrote %d bytes to %s to sorter_results pipe\n", w, sorter_results);
+        close(fdnamed); 
+       
+    }
 
 
     

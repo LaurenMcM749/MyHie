@@ -30,13 +30,13 @@
 
 //Sorting node
 // TODO - NAMED PIPE: Passes sorted data and time stats to merger node through name pipe
-// DEBUG - SIG: Sends SIGUSR1 to the root before termination
+////// SIG: Sends SIGUSR1 to the root before termination
 ////// Odd-indexed workers use Heap Sort and even-indexed workers use Bubble Sort
 
 //Merger node
 // TODO - NAMED PIPE: Receives(reads) ordered partial results from all pipes and creates outcome of entire sorting process
 // TODO - Prints out stats including time for each sorter to sort data
-// DEBUG - SIG: Sends SIGUSR2 to coord to show work completed
+////// Sends SIGUSR2 to coord to show work completed
 ////// Created by coord
 
 // ./myhie -i InputFile -k NumOfWorkers -r -a AttributeNumber -o Order -s OutputFile
@@ -51,16 +51,14 @@
 //Attempts to read from a pipe that is currently empty block until at least one byte has been written to the pipe.
 
 void signalHandler(int signum){
+    int count;
     printf("Caught signal %d!\n",signum);
 	if (signum==SIGUSR1) {
 		printf("got SIGUSR1\n");
-        //count++
 		wait(NULL);
 	}
     if (signum==SIGUSR2) {
 		printf("got SIGUSR2\n");
-        //count++
-        //Gracefull release resources
 		wait(NULL);
     }
 }
@@ -116,6 +114,7 @@ int main(int argc, char*argv[]){
     int rc;
     struct pollfd fdarray [1];
     char *singleLine;
+    int count;
 
     //***Handle command line arguments***
     char argarr[1000];
@@ -204,9 +203,12 @@ int main(int argc, char*argv[]){
 
     };
 
+ 
+
     
     //Create coord node
     coordpid = fork();
+    // wait(NULL);
 
     if (coordpid == -1) {
         perror ( " Failed to fork " );
@@ -220,8 +222,8 @@ int main(int argc, char*argv[]){
 
         // close unwanted pipe ends by parent
         close(pipe1[0]);
-        printf("%d: Root: writing to pipe '%s'\n", getpid(), tester);
-        w = write(pipe1[1], tester, strlen(tester)+1);
+        printf("%d: Root: writing to pipe '%s'\n", getpid(), argarr);
+        w = write(pipe1[1], argarr, strlen(argarr)+1);
         if (w >= 0)
         {
             printf("Write successful: %d bytes \n ", w);
@@ -235,37 +237,7 @@ int main(int argc, char*argv[]){
     //In Coord Node
     if (coordpid == 0) {
 
-        // mergerpid = fork();
-       
-        // if (mergerpid == -1){
-        //     printf("Merger node failed \n");
-        // } 
         
-        // //In merger node
-        // if (mergerpid == 0){
-        
-        //     printf("I am merger node \n");
-
-            //Pipes unsuccessful
-            // fdnamed = open(sr, O_NONBLOCK); 
-            // if ( fdnamed < 0) 
-            // {
-            //     perror("File can't open to read.");
-            //     return 0;
-            // }
-            // printf("Opened fd: %d\n", fdnamed);
-            // if ( read(fdnamed, singleLine, sizeof(singleLine)) < 0) 
-            // {
-            //     perror("read");
-            // }; 
-            // printf("Merger node reading: %s\n", singleLine); 
-            // close(fdnamed);
-        
-            // //Send SIGUSR2 when complete
-            // printf("Merger sending SIGUSR2 to coord...\n");
-            // kill(getppid(),SIGUSR2); 
-        
-        // }
         //In coord node
         // if (mergerpid > 0)
         // {
@@ -317,9 +289,9 @@ int main(int argc, char*argv[]){
             printf("Closed the pipe\n");
 
             //Send SIGUSR1 before termination
-            //Debug - make sure sends to root
-            // printf("Sorter sending SIGUSR1 to root...\n");
-            // kill(rootpid,SIGUSR1); /*send SIGUSR1 signal to parent*/
+            printf("Sorter sending SIGUSR1 to root...\n");
+            kill(rootpid,SIGUSR1); /*send SIGUSR1 signal to parent*/
+            count++;
        
             // Coord makes k sorter nodes
             for(int i = 0; i < k; i++){ 
@@ -364,19 +336,16 @@ int main(int argc, char*argv[]){
                     //Even pid use Bubble Sort
                     if ( p % 2 == 0)
                     {
-                        execlp("./sorter1","sorter1", argv[3], argv[4], NULL); 
+                        execlp("./sorter1","sorter1", argv[3], argv[4], argv[1], argv[5], NULL); 
                         exit(0);
 
                     }
                     //Odd pid use Insertion Sort
                     else 
                     {
-                        execlp("./sorter2","sorter2", argv[3], argv[4], NULL); 
+                        execlp("./sorter2","sorter2", argv[3], argv[4], argv[1], argv[5], NULL); 
                         exit(0);
                     }
-
-    
-                    
 
                     // // close unwanted pipe ends by child
                     // fflush(stdout);
@@ -390,16 +359,50 @@ int main(int argc, char*argv[]){
                     // close(parent_fds[0]);
 
         
-                    exit(0); 
-                // }
+                //     exit(0); 
+                // // }
             
-            }  
+            } 
+
+        
         }
-   
-    return 0;
-    
+
+         mergerpid = fork();
+       
+        if (mergerpid == -1){
+            printf("Merger node failed \n");
+        } 
+        
+        //In merger node
+        if (mergerpid == 0){
+        
+            printf("I am merger node \n");
+
+            //Pipes unsuccessful
+            fdnamed = open(sr, O_NONBLOCK); 
+            if ( fdnamed < 0) 
+            {
+                perror("File can't open to read.");
+                return 0;
+            }
+            printf("Opened fd: %d\n", fdnamed);
+            if ( read(fdnamed, singleLine, sizeof(singleLine)) < 0) 
+            {
+                perror("read");
+            }; 
+            printf("Merger node reading: %s\n", singleLine); 
+            close(fdnamed);
+        
+            // //Send SIGUSR2 when complete
+            printf("Merger sending SIGUSR2 to coord...\n");
+            kill(rootpid,SIGUSR2); 
+            count++;
+        
+        }
+
+         printf("Signals caught: %d \n", count);
+        return 0;
 
 }
- 
 }  
 
