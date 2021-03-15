@@ -77,6 +77,7 @@ int main(int argc, char*argv[]){
     char *outfile_name;
     outfile_name = argv[5];
     fpointer = fopen(argv[1],"r"); 
+    remove("outfile.txt");
     outfile = fopen(outfile_name,"a");
     k = atoi(argv[2]);
     atnum = argv[3];
@@ -394,9 +395,11 @@ int main(int argc, char*argv[]){
             
             }  
         }
-    
+   
     return 0;
+    
 
 }
+ 
 }  
 

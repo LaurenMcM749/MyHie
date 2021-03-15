@@ -45,30 +45,184 @@ bucket_t *create_bucket(bucket_t **start_ref, const char *rin, const char *first
    
 }
 
-void sortedInsert(bucket_t ** head_ref, bucket_t * new_node) 
+void sortedInserta(bucket_t ** head_ref, bucket_t * new_node, char *arg) 
 { 
     bucket_t* current; 
     /* Special case for the head end */
-    if (*head_ref == NULL || atoi((*head_ref)->rin) >= atoi(new_node->rin))
-    { 
-        new_node->next = *head_ref; 
-        *head_ref = new_node; 
-    } 
-    else
-    { 
-        /* Locate the node before the point of insertion */
-        current = *head_ref; 
-        while (current->next!=NULL && ( (atoi(current->next->rin)) < (atoi(new_node->rin)) ) )
+    if (strcmp(arg,"0")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->rin) >= atoi(new_node->rin))
         { 
-            current = current->next; 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
         } 
-        new_node->next = current->next; 
-        current->next = new_node; 
-    } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->rin)) < (atoi(new_node->rin)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+    if (strcmp(arg,"3")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->numdep) >= atoi(new_node->numdep))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->numdep)) < (atoi(new_node->numdep)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+    if (strcmp(arg,"4")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->inc) >= atoi(new_node->inc))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->inc)) < (atoi(new_node->inc)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+    if (strcmp(arg,"5")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->zip) >= atoi(new_node->zip))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->zip)) < (atoi(new_node->zip)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+    
+    
+}
+
+
+void sortedInsertd(bucket_t ** head_ref, bucket_t * new_node, char * arg) 
+{ 
+    bucket_t* current; 
+    /* Special case for the head end */
+    if (strcmp(arg,"0")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->rin) <= atoi(new_node->rin))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->rin)) > (atoi(new_node->rin)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+     if (strcmp(arg,"3")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->numdep) <= atoi(new_node->numdep))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->numdep)) > (atoi(new_node->numdep)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+     if (strcmp(arg,"4")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->inc) <= atoi(new_node->inc))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->inc)) > (atoi(new_node->inc)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+     if (strcmp(arg,"5")== 0)
+    {
+        if (*head_ref == NULL || atoi((*head_ref)->zip) <= atoi(new_node->zip))
+        { 
+            new_node->next = *head_ref; 
+            *head_ref = new_node; 
+        } 
+        else
+        { 
+            /* Locate the node before the point of insertion */
+            current = *head_ref; 
+            while (current->next!=NULL && ( (atoi(current->next->zip)) > (atoi(new_node->zip)) ) )
+            { 
+                current = current->next; 
+            } 
+            new_node->next = current->next; 
+            current->next = new_node; 
+        } 
+
+    }
+    
 } 
 
 // function to sort a singly linked list using insertion sort 
-void insertionSort(bucket_t **head_ref) 
+void insertionSorta(bucket_t **head_ref, char *arg) 
 { 
     // Initialize sorted linked list 
     bucket_t *sorted = NULL; 
@@ -82,7 +236,32 @@ void insertionSort(bucket_t **head_ref)
         bucket_t *next = current->next; 
   
         // insert current in sorted linked list 
-        sortedInsert(&sorted, current); 
+        sortedInserta(&sorted, current, arg); 
+  
+        // Update current 
+        current = next; 
+    } 
+  
+    // Update head_ref to point to sorted linked list 
+    *head_ref = sorted; 
+} 
+
+// function to sort a singly linked list using insertion sort 
+void insertionSortd(bucket_t **head_ref, char * arg) 
+{ 
+    // Initialize sorted linked list 
+    bucket_t *sorted = NULL; 
+  
+    // Traverse the given linked list and insert every 
+    // node to sorted 
+    bucket_t *current = *head_ref; 
+    while (current != NULL) 
+    { 
+        // Store next for next iteration 
+        bucket_t *next = current->next; 
+  
+        // insert current in sorted linked list 
+        sortedInsertd(&sorted, current, arg); 
   
         // Update current 
         current = next; 
@@ -98,7 +277,7 @@ void printList(bucket_t *start, FILE *outfile)
     printf("\n"); 
     while (temp!=NULL) 
     { 
-        fprintf(outfile,"%s %s %s %s %s %s %s \n ", temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip, "sorter2");
+        fprintf(outfile,"%s %s %s %s %s %s %s\n ", "2: ",temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip);
         temp = temp->next; 
     } 
 } 
@@ -168,17 +347,53 @@ int main(int argc, char *argv[]){
         printf("Sorting RIN... \n");
         if( strcmp(argv[2],"a" ) == 0)
         {
-            printf("Ascending \n");
-            insertionSort(&start);
-           
+            printf("Ascending IS \n");
+            insertionSorta(&start,"0");
         }
-
         if( strcmp(argv[2],"d" ) == 0)
         {
-            printf("Descending \n");
+            printf("Descending IS \n");
+            insertionSortd(&start,"0");
         }
-
-
+    }
+    if( strcmp(argv[1],"3" )==0){
+        printf("Sorting numdep... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending IS \n");
+            insertionSorta(&start,"3");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending IS \n");
+            insertionSortd(&start,"3");
+        }
+    }
+    if( strcmp(argv[1],"4" )==0){
+        printf("Sorting income... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending IS \n");
+            insertionSorta(&start,"4");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending IS \n");
+            insertionSortd(&start,"4");
+        }
+    }
+    if( strcmp(argv[1],"5" )==0){
+        printf("Sorting zip... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending IS \n");
+            insertionSorta(&start,"5");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending IS \n");
+            insertionSortd(&start,"5");
+        }
     }
     printList(start,outfile);
     fclose(outfile);

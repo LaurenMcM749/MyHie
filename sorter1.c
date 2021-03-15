@@ -55,64 +55,198 @@ void swap(bucket_t *a, bucket_t *b)
 } 
 
 
-void bubbleSorta(bucket_t *start) 
+void bubbleSorta(bucket_t *start, char*arg) 
 { 
     int swapped, i; 
     bucket_t *ptr1; 
     bucket_t *lptr = NULL; 
   
-    /* Checking for empty list */
-    if (start == NULL) 
-        return; 
-  
-    do
-    { 
-        swapped = 0; 
-        ptr1 = start; 
-  
-        while (ptr1->next != lptr) 
+    if (strcmp(arg,"0")==0)
+    {   
+        /* Checking for empty list */
+        if (start == NULL) 
+            return; 
+        do
         { 
-            //While current RIN > next RIN
-            if ( atoi(ptr1->rin) > atoi(ptr1->next->rin) ) 
-            {  //
-                swap(ptr1, ptr1->next); 
-                swapped = 1; 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->rin) > atoi(ptr1->next->rin) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
             } 
-            ptr1 = ptr1->next; 
+            lptr = ptr1; 
         } 
-        lptr = ptr1; 
-    } 
-    while (swapped); 
+        while (swapped); 
+    }
+    if (strcmp(arg,"3")==0)
+    {   
+        /* Checking for empty list */
+        if (start == NULL) 
+            return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->numdep) > atoi(ptr1->next->numdep) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
+    if (strcmp(arg,"4")==0)
+    {   
+        /* Checking for empty list */
+        if (start == NULL) 
+            return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->inc) > atoi(ptr1->next->inc) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
+    if (strcmp(arg,"5")==0)
+    {   
+        /* Checking for empty list */
+        if (start == NULL) 
+            return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->zip) > atoi(ptr1->next->zip) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
 } 
 
-void bubbleSortd(bucket_t *start) 
+void bubbleSortd(bucket_t *start, char* arg) 
 { 
     int swapped, i; 
     bucket_t *ptr1; 
     bucket_t *lptr = NULL; 
+
+     /* Checking for empty list */
+        if (start == NULL) 
+            return; 
   
-    /* Checking for empty list */
-    if (start == NULL) 
-        return; 
-  
-    do
-    { 
-        swapped = 0; 
-        ptr1 = start; 
-  
-        while (ptr1->next != lptr) 
+    if (strcmp(arg,"0")==0)
+    {   
+       
+        do
         { 
-            //While current RIN > next RIN
-            if ( atoi(ptr1->rin) < atoi(ptr1->next->rin) ) 
-            {  //
-                swap(ptr1, ptr1->next); 
-                swapped = 1; 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->rin) < atoi(ptr1->next->rin) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
             } 
-            ptr1 = ptr1->next; 
+            lptr = ptr1; 
         } 
-        lptr = ptr1; 
-    } 
-    while (swapped); 
+        while (swapped); 
+    }
+    if (strcmp(arg,"3")==0)
+    {   
+        // /* Checking for empty list */
+        // if (start == NULL) 
+        //     return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->numdep) < atoi(ptr1->next->numdep) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
+    if (strcmp(arg,"4")==0)
+    {   
+        // /* Checking for empty list */
+        // if (start == NULL) 
+        //     return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->inc) < atoi(ptr1->next->inc) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
+    if (strcmp(arg,"5")==0)
+    {   
+        // /* Checking for empty list */
+        // if (start == NULL) 
+        //     return; 
+        do
+        { 
+            swapped = 0; 
+            ptr1 = start; 
+            while (ptr1->next != lptr) 
+            { 
+                if ( atoi(ptr1->zip) < atoi(ptr1->next->zip) ) 
+                {  
+                    swap(ptr1, ptr1->next); 
+                    swapped = 1; 
+                } 
+                ptr1 = ptr1->next; 
+            } 
+            lptr = ptr1; 
+        } 
+        while (swapped); 
+    }
 } 
 
 
@@ -124,7 +258,7 @@ void printList(bucket_t *start, FILE *outfile)
     printf("\n"); 
     while (temp!=NULL) 
     { 
-        fprintf(outfile,"%s %s %s %s %s %s %s \n ", temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip, "sorter1");
+        fprintf(outfile,"%s %s %s %s %s %s %s\n ", "1:", temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip);
         temp = temp->next; 
         
 
@@ -223,19 +357,53 @@ int main(int argc, char *argv[]){
         printf("Sorting RIN... \n");
         if( strcmp(argv[2],"a" ) == 0)
         {
-            printf("Ascending \n");
-            bubbleSorta(start);
-            exit(0);
+            printf("Ascending BS \n");
+            bubbleSorta(start,"0");
         }
-
         if( strcmp(argv[2],"d" ) == 0)
         {
-            printf("Descending \n");
-            bubbleSortd(start);
-            exit(0);
+            printf("Descending BS \n");
+            bubbleSortd(start,"0");
         }
-
-
+    }
+    if( strcmp(argv[1],"3" )==0){
+        printf("Sorting numdep... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending BS \n");
+            bubbleSorta(start,"3");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending BS \n");
+            bubbleSortd(start,"3");
+        }
+    }
+    if( strcmp(argv[1],"4" )==0){
+        printf("Sorting income... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending BS \n");
+            bubbleSorta(start,"4");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending BS \n");
+            bubbleSortd(start,"4");
+        }
+    }
+    if( strcmp(argv[1],"5" )==0){
+        printf("Sorting zip... \n");
+        if( strcmp(argv[2],"a" ) == 0)
+        {
+            printf("Ascending BS \n");
+            bubbleSorta(start,"5");
+        }
+        if( strcmp(argv[2],"d" ) == 0)
+        {
+            printf("Descending BS \n");
+            bubbleSortd(start,"5");
+        }
     }
 
     printList(start, outfile);
