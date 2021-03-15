@@ -11,6 +11,7 @@
 #include <fcntl.h> 
 #include <sys/stat.h> 
 #include <signal.h>
+#include <poll.h>
 
 #define N 101
 #define READ_END 0

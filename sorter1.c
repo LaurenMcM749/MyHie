@@ -86,25 +86,26 @@ void bubbleSort(bucket_t *start)
 } 
 
 
-void printList(bucket_t *start) 
+void printList(bucket_t *start, FILE *outfile) 
 { 
+
     bucket_t *temp = start; 
     printf("\n"); 
     while (temp!=NULL) 
     { 
-        printf("%s %s %s %s %s %s \n ", temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip); 
+        fprintf(outfile,"%s %s %s %s %s %s %s \n ", temp->rin, temp->first, temp->last, temp->numdep, temp->inc, temp->zip, "sorter1");
         temp = temp->next; 
+        
+
     } 
 } 
-
-
 
 int main(int argc, char *argv[]){
 
     FILE *testdata;
     FILE *outfile;
     testdata = fopen("test_data.txt","r");
-    outfile = fopen("outfile.txt","w");
+    outfile = fopen("outfile.txt","a");
     char singleLine[500];
     char *token;
     int i;
@@ -169,8 +170,6 @@ int main(int argc, char *argv[]){
         {
             printf("Ascending \n");
             bubbleSort(start);
-            
-           
         }
 
         if( strcmp(argv[2],"d" ) == 0)
@@ -181,7 +180,10 @@ int main(int argc, char *argv[]){
 
     }
 
-    printList(start);
+    printList(start, outfile);
+    fclose(outfile);
+
+
     
 
 }
